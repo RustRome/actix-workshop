@@ -5,7 +5,7 @@ mod common {
     use actix_http_test::{TestServer, TestServerRuntime};
     use actix_web::{web, App};
 
-    pub fn crate_server() -> TestServerRuntime {
+    pub fn create_server() -> TestServerRuntime {
         let state = create_state();
 
         let data = web::Data::new(state);
@@ -19,7 +19,7 @@ mod common {
         })
     }
 
-    pub fn crate_server_with_middleware() -> TestServerRuntime {
+    pub fn create_server_with_middleware() -> TestServerRuntime {
         let state = create_state();
 
         let data = web::Data::new(state);
@@ -28,8 +28,8 @@ mod common {
             HttpService::new(
                 App::new()
                     .register_data(data.clone())
-                    .wrap(Counter)
-                    .configure(|builder| config_app(builder)),
+                    .configure(|builder| config_app(builder))
+                    .wrap(Counter),
             )
         })
     }
@@ -43,12 +43,12 @@ mod warmup {
     use rand::Rng;
     use serde_json::{json, Value};
 
-    use super::common::{crate_server, crate_server_with_middleware};
+    use super::common::{create_server, create_server_with_middleware};
 
     #[test]
-    #[ignore]
+    // #[ignore]
     fn index() {
-        let mut srv = crate_server();
+        let mut srv = create_server();
 
         let req = srv.get("/");
         let mut response = srv.block_on(req.send()).unwrap();
@@ -65,9 +65,9 @@ mod warmup {
     }
 
     #[test]
-    #[ignore]
+    // #[ignore]
     fn static_content() {
-        let mut srv = crate_server();
+        let mut srv = create_server();
 
         let req = srv.get("/static");
         let mut response = srv.block_on(req.send()).unwrap();
@@ -87,9 +87,9 @@ mod warmup {
     }
 
     #[test]
-    #[ignore]
+    // #[ignore]
     fn hello_params() {
-        let mut srv = crate_server();
+        let mut srv = create_server();
 
         let req = srv.get("/hello/RustLab");
         let mut response = srv.block_on(req.send()).unwrap();
@@ -105,9 +105,9 @@ mod warmup {
     }
 
     #[test]
-    #[ignore]
+    // #[ignore]
     fn hello_params_json() {
-        let mut srv = crate_server();
+        let mut srv = create_server();
 
         let req = srv.get("/hello_json/Mark");
         let mut response = srv.block_on(req.send()).unwrap();
@@ -126,9 +126,9 @@ mod warmup {
     }
 
     #[test]
-    #[ignore]
+    // #[ignore]
     fn json_body() {
-        let mut srv = crate_server();
+        let mut srv = create_server();
 
         let req = srv.post("/json_body");
         let mut response = srv
@@ -149,9 +149,9 @@ mod warmup {
     }
 
     #[test]
-    #[ignore]
+    // #[ignore]
     fn async_json_error() {
-        let mut srv = crate_server();
+        let mut srv = create_server();
 
         let req = srv.get("/async_error");
         let mut response = srv.block_on(req.send()).unwrap();
@@ -166,9 +166,9 @@ mod warmup {
     }
 
     #[test]
-    #[ignore]
+    // #[ignore]
     fn middleware() {
-        let mut srv = crate_server_with_middleware();
+        let mut srv = create_server_with_middleware();
 
         let mut rng = rand::thread_rng();
 
@@ -206,7 +206,7 @@ mod warmup {
 #[cfg(test)]
 mod contacts_book {
 
-    use super::common::crate_server;
+    use super::common::create_server;
     use actix_http::{http::Method, http::StatusCode};
     use actix_http_test::TestServerRuntime;
     use futures;
@@ -214,9 +214,9 @@ mod contacts_book {
     use serde_json::{json, Value};
 
     #[test]
-    #[ignore]
+    // #[ignore]
     fn create_contact() {
-        let mut srv = crate_server();
+        let mut srv = create_server();
         let contact = create_contact_internal(&mut srv, new_contact("Mark", "mark@foo.com"));
 
         let id = contact["id"].as_i64().unwrap();
@@ -225,9 +225,9 @@ mod contacts_book {
     }
 
     #[test]
-    #[ignore]
+    // #[ignore]
     fn get_contact() {
-        let mut srv = crate_server();
+        let mut srv = create_server();
 
         let contact = create_contact_internal(&mut srv, new_contact("Mark", "mark@foo.com"));
 
@@ -244,9 +244,9 @@ mod contacts_book {
     }
 
     #[test]
-    #[ignore]
+    // #[ignore]
     fn list_contact() {
-        let mut srv = crate_server();
+        let mut srv = create_server();
 
         let contact = create_contact_internal(&mut srv, new_contact("Mark", "mark@foo.com"));
 
@@ -268,9 +268,9 @@ mod contacts_book {
     }
 
     #[test]
-    #[ignore]
+    // #[ignore]
     fn delete_contact() {
-        let mut srv = crate_server();
+        let mut srv = create_server();
 
         let contact = create_contact_internal(&mut srv, new_contact("Mark", "mark@foo.com"));
 

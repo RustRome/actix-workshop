@@ -1,7 +1,11 @@
+use crate::State;
+
 use actix_service::{Service, Transform};
 use actix_web::{dev::ServiceRequest, dev::ServiceResponse, Error};
+
 use futures::future::{ok, FutureResult};
 use futures::{Future, Poll};
+
 
 pub struct Counter;
 
@@ -43,6 +47,13 @@ where
     }
 
     fn call(&mut self, req: ServiceRequest) -> Self::Future {
-        Box::new(self.service.call(req))
+        let data = req.app_data::<State>().expect("Cannot get globl state");
+
+        Box::new(self.service.call(req).and_then(move |res| {
+            let mut counter = data.counter.lock().expect("Cannot get the lock lock ");
+
+            *counter += 1;
+            Ok(res)
+        }))
     }
 }
