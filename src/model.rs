@@ -3,21 +3,9 @@ use diesel::prelude::*;
 use diesel::{QueryResult, SqliteConnection};
 use serde::{Deserialize, Serialize};
 
-mod schema {
 
-    table! {
-
-        contacts {
-            id -> Integer,
-            name -> Text,
-            email -> Text,
-        }
-
-    }
-}
-
-pub use self::schema::*;
-use schema::contacts::dsl::{contacts as all_contacts, email};
+use crate::schema::*;
+use crate::schema::contacts::dsl::{contacts as all_contacts, email};
 
 #[table_name = "contacts"]
 #[derive(Deserialize, Insertable, Debug)]
@@ -28,7 +16,7 @@ pub struct NewContact {
 
 #[derive(Serialize, Queryable, Debug)]
 pub struct Contact {
-    id: i32,
+    id: Option<i32>,
     name: String,
     email: String,
 }

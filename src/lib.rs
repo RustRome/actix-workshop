@@ -14,6 +14,7 @@ mod util;
 mod api;
 pub mod middleware;
 pub mod model;
+pub mod schema;
 mod test;
 
 use diesel::{
