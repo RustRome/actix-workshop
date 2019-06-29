@@ -42,6 +42,18 @@ This workshop is an introduction on Actix Web for writing web service. Knowledge
 - [Diesel Cli](http://diesel.rs/guides/getting-started) for database migrations (Optional) 
 
 
+To install the cli without these dependencies, omit the unneeded dependencies from the following command:
+
+```
+cargo install diesel_cli --no-default-features --features "sqlite"
+```
+
+If you are using a system without an easy way to install sqlite (for example Windows), you can use a bundled version instead:
+
+```
+cargo install diesel_cli --no-default-features --features "sqlite-bundled"
+```
+
 ## Documentation 
 
 - [Actix-Web](https://docs.rs/actix-web/1.0.2/actix_web/)
