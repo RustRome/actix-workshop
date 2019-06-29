@@ -38,7 +38,7 @@ This workshop is an introduction on Actix Web for writing web service. Knowledge
 
 
 ## Tools
-- [Rust]() Minimum supported Rust version: 1.34 or later
+- [Rust](https://www.rust-lang.org/tools/install) Minimum supported Rust version: 1.34 or later
 - [Diesel Cli](http://diesel.rs/guides/getting-started) for database migrations (Optional) 
 
 
